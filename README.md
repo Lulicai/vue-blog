@@ -1,5 +1,4 @@
 # vue-blog
-<<<<<<< HEAD
 
 ## Project setup
 ```
@@ -33,6 +32,3 @@ npm run test:unit
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
-=======
-vue-blog
->>>>>>> 7fff861f5e3898024c28f3ec761f9baae3e8199d

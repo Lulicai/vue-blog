@@ -1,10 +1,12 @@
 <template>
   <div class="home">
-    <el-button type="primary">主要按钮1</el-button>
-    <el-button type="primary">主要按钮2</el-button>
-    <el-button type="primary">主要按钮3</el-button>
-    <el-button type="primary">主要按钮4</el-button>
-    <component v-bind:is="currentView"></component>
+    <el-button type="primary" @click.prevent="buttonClick('Form1')">主要按钮1</el-button>
+    <el-button type="primary" @click.prevent="buttonClick('Form2')">主要按钮2</el-button>
+    <el-button type="primary" @click.prevent="buttonClick('Form3')">主要按钮3</el-button>
+    <el-button type="primary" @click.prevent="buttonClick('Form4')">主要按钮4</el-button>
+    <keep-alive>
+      <component v-bind:is="currentView"></component>
+    </keep-alive>
   </div>
 </template>
 
@@ -23,7 +25,28 @@ export default {
       currentView:'Form1'
     }
   },
-  components:{
+  methods:{
+    buttonClick:function(arg){
+      this.currentView = arg;
+    }
+  },
+  components:{Form1,Form2,Form3,Form4},
+  beforeCreate(){
+    console.log('create.....')
+  },
+  created(){
+
+  },
+  beforeMount(){
+
+  },
+  mounted(){
+
+  },
+  beforeUpdate(){
+
+  },
+  updated(){
     
   }
 };
