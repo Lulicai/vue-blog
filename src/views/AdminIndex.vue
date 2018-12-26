@@ -6,26 +6,26 @@
       <el-breadcrumb-item><a href="/admin/user">用户管理</a></el-breadcrumb-item>
     </el-breadcrumb>
     <el-table
-    :data="tableData"
-    border
-    >
-      <el-table-column
-        prop="date"
-        label="日期">
-      </el-table-column>
-      <el-table-column
-        prop="name"
-        label="姓名"
-        >
-      </el-table-column>
-      <el-table-column
-        prop="name"
-        label="状态"
-        >
-      </el-table-column>
-      <el-table-column
-        label="操作"
-        >
+      :data="tableData"
+      border
+      >
+        <el-table-column
+          prop="date"
+          label="日期">
+        </el-table-column>
+        <el-table-column
+          prop="name"
+          label="姓名"
+          >
+        </el-table-column>
+        <el-table-column
+          prop="name"
+          label="状态"
+          >
+        </el-table-column>
+        <el-table-column
+          label="操作"
+          >
         <template slot-scope="scope">
           <el-button @click="handleClick(scope.row)" type="text" size="small">查看</el-button>
           <el-button type="text" size="small">编辑</el-button>
@@ -45,7 +45,7 @@
     name:'adminIndex',
     methods: {
       handleClick(row) {
-        
+        // console.log(row)
       }
     },
     data() {
