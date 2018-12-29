@@ -28,7 +28,6 @@
                 <i class="el-icon-setting"></i>
                 <span slot="title">文章管理</span>
             </el-menu-item>
-            
         </el-menu>
         <el-container>
             <el-header>
