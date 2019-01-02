@@ -32,22 +32,26 @@
         <template slot-scope="scope">
           <el-button @click="handleClick(scope.row,true)" type="text" size="small">查看</el-button>
           <el-button type="text" size="small" @click="handleClick(scope.row,false)">编辑</el-button>
-          <el-button @click="editUserRankClick(scope.row)" type="text" size="small">{{parseInt(scope.row.status)?"启用":"禁用"}}</el-button>
+          <el-button @click="editUserStatusClick(scope.row)" type="text" size="small">{{parseInt(scope.row.status)?"启用":"禁用"}}</el-button>
         </template>
       </el-table-column>
     </el-table>
     <el-dialog :title="disabled?'用户查看':'用户编辑'" :visible.sync="dialogUserTableVisible" width="40%">
-      <el-form :model="form">
-        <el-form-item label="手机号" :label-width="formLabelWidth">
+      <el-form :model="form" :rules="rules" ref="form">
+        <el-form-item label="手机号" :label-width="formLabelWidth" prop="telephone">
           <el-input v-model="form.telephone" autocomplete="off" :disabled="disabled"></el-input>
         </el-form-item>
-        <el-form-item label="权限" :label-width="formLabelWidth">
-          <el-input v-model="form.rank" autocomplete="off" :disabled="disabled"></el-input>
+        <el-form-item label="权限" :label-width="formLabelWidth" prop="rank">
+          <el-select v-model="form.rank" placeholder="请选择管理员权限" :disabled="disabled">
+            <el-option label="超级管理员" value="1"></el-option>
+            <el-option label="二级管理员" value="2"></el-option>
+            <el-option label="三级管理员" value="3"></el-option>
+          </el-select>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogUserTableVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogUserTableVisible = false">确 定</el-button>
+        <el-button type="primary" @click="editUserMessage('form')">确 定</el-button>
       </div>
     </el-dialog>
     <el-pagination
@@ -61,6 +65,7 @@
 </template>
 
 <script>
+var myreg = /^(((13[0-9]{1})|(14[0-9]{1})|(15[0-9]{1})|(16[0-9]{1})|(17[0-9]{1})|(19[0-9]{1})|(18[0-9]{1}))+\d{8})$/;
 import { mapState, mapActions } from "vuex";
 export default {
   name:'adminIndex',
@@ -72,10 +77,20 @@ export default {
       dialogUserTableVisible:false,
       form: {
           telephone: "",
-          rank: ""
+          rank: "",
+          id: ""
       },
       disabled: false,
-      formLabelWidth: '80px'
+      formLabelWidth: '80px',
+      rules: {
+        telephone: [
+          { required: true, message: '请输入手机号', trigger: 'blur'},
+          { min: 11, max: 11, message: '长度必须11个字符', trigger: 'blur' }
+        ],
+        rank: [
+          { required: true, message: '请选择管理权限', trigger: 'change' }
+        ]
+    }
     }
   },
   computed: {
@@ -84,14 +99,12 @@ export default {
       userRes: state => state.user.userRes
     })
   },
-  filters:{
-    
-  },
   methods: {
-    ...mapActions(["GetUserList", "editUserRank"]),
+    ...mapActions(["GetUserList", "editUserStatus", "editUser"]),
     handleClick(row,state) {
       this.dialogUserTableVisible = !this.dialogUserTableVisible;
       //数据回显
+      this.form.id = row.id;
       this.form.telephone = row.telephone;
       this.form.rank = row.rank;
       if(state){
@@ -107,14 +120,14 @@ export default {
       return this.$moment(params).format('YYYY-MM-DD');
     },
     rankForm(params) {
-      return params === "1" ? "超级管理员" : params === "2" ? "二级管理员" : "三级管理员"
+      return params.rank == "1" ? "超级管理员" : params.rank == "2" ? "二级管理员" : "三级管理员"
     },
-    editUserRankClick(data) {
+    editUserStatusClick(data) {
       let params = {
         id:data.id,
         status:!parseInt(data.status)
       };
-      this.editUserRank(params).then(()=>{
+      this.editUserStatus(params).then(()=>{
         if(this.userRes.code === "0000"){
           this.$message({
             message: "操作成功",
@@ -122,6 +135,44 @@ export default {
           });
           this.getList(this.pageNo);
         }
+      })
+    },
+    editUserMessage(form) {
+      this.$refs[form].validate((valid) => {
+         if (valid) {
+           console.log(33333)
+           if(!myreg.test(this.form.telephone)) {
+              this.$message({
+                type: "warning",
+                message:  "请填写正确的手机号"
+              })
+           }else {
+              this.dialogUserTableVisible = false;
+              let params = {
+                  id:this.form.id,
+                  telephone:this.form.telephone,
+                  rank:this.form.rank,
+              }
+              // console.log(155,params)
+              this.editUser(params).then(()=>{
+                if(this.userRes.code == "0000"){
+                  this.$message({
+                    message: "操作成功",
+                    type: "success"
+                  });
+                  this.getList(this.pageNo);
+                }else{
+                  this.$message({
+                    message: this.userRes.message,
+                    type: "warning"
+                  });
+                }
+              })
+           }
+         }else {
+            console.log('error submit!!');
+            return false;
+          }
       })
     },
     getList(page) {
@@ -133,7 +184,7 @@ export default {
         console.log(this.resData)
         if(this.resData.code == "0000"){
           this.tableData = this.resData.data.rows;
-           this.count = this.resData.data.count;
+          this.count = this.resData.data.count;
         }else{
           this.$message({
             message: this.resData.message,

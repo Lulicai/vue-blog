@@ -22,15 +22,29 @@ const actions = {
         console.log(response);
       });
   },
-  async editUserRank({ commit }, payload) {
+  async editUserStatus({ commit }, payload) {
     let config = {
       method: "post",
-      url: "/api/editUserRank",
+      url: "/api/editUserStatus",
       data: qs.stringify(payload)
     };
     await axios(config)
       .then(function(response) {
-        commit("editUserRank", response.data);
+        commit("editUserStatus", response.data);
+      })
+      .catch(function(response) {
+        console.log(response);
+      });
+  },
+  async editUser({ commit }, payload) {
+    let config = {
+      method: "post",
+      url: "/api/editUser",
+      data: qs.stringify(payload)
+    };
+    await axios(config)
+      .then(function(response) {
+        commit("editUser", response.data);
       })
       .catch(function(response) {
         console.log(response);
@@ -43,7 +57,10 @@ const mutations = {
     // state.code = payload
     state.resData = payload;
   },
-  editUserRank(state, payload) {
+  editUserStatus(state, payload) {
+    state.userRes = payload;
+  },
+  editUser(state, payload) {
     state.userRes = payload;
   }
 };
