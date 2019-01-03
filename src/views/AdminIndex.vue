@@ -72,7 +72,7 @@
 </template>
 
 <script>
-var myreg = /^(((13[0-9]{1})|(14[0-9]{1})|(15[0-9]{1})|(16[0-9]{1})|(17[0-9]{1})|(19[0-9]{1})|(18[0-9]{1}))+\d{8})$/;
+import { myreg } from "../common/util.js"
 import { mapState, mapActions } from "vuex";
 import NewUserDialog from "../components/backend/NewUserDialog.vue"
 export default {
@@ -206,7 +206,7 @@ export default {
         pageNo: page
       };
       this.GetUserList(params).then(()=>{
-        console.log(this.resData)
+        // console.log(this.resData)
         if(this.resData.code == "0000"){
           this.tableData = this.resData.data.rows;
           this.count = this.resData.data.count;

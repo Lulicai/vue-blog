@@ -1,7 +1,7 @@
 <template>
     <el-container class="panel">
         <el-menu 
-            default-active="2" 
+            default-active="/admin/user" 
             class="el-menu-vertical-demo" 
             @open="handleOpen" 
             @close="handleClose" 
@@ -9,25 +9,20 @@
             background-color="#001529"
             text-color="#ffffff"
             active-text-color="#3eaf7c"
+            router
         >
-            <el-menu-item index="1">
+            <!-- <el-menu-item index="1">
                 <div class="logo-wenzi">
                     <img src="../../assets/logo.png" alt="">
                     <span>LILY BLOG</span>
                 </div>
-            </el-menu-item>
-            <el-menu-item index="2">
-                <i class="el-icon-menu"></i>
-                <span slot="title">用户管理</span>
-            </el-menu-item>
-            <el-menu-item index="3">
-                <i class="el-icon-document"></i>
-                <span slot="title">分类管理</span>
-            </el-menu-item>
-            <el-menu-item index="4">
-                <i class="el-icon-setting"></i>
-                <span slot="title">文章管理</span>
-            </el-menu-item>
+            </el-menu-item> -->
+            <template v-for="(menu, index) in menus">
+                <el-menu-item :index="menu.path">
+                    <i :class="menu.icon"></i>
+                    <span slot="title">{{menu.name}}</span>
+                </el-menu-item>
+            </template>
         </el-menu>
         <el-container>
             <el-header>
@@ -55,13 +50,22 @@
     </el-container>
 </template>
 <script>
+import menuData from "../../common/menu.js";
+import { mapState, mapActions } from "vuex";
 export default {
     data() {
       return {
-        isCollapse: false
+        isCollapse: false,
+        menus: menuData
       };
     },
+    computed: {
+      ...mapState({
+        userInfo: state => state.login.userInfo
+      })
+    },
     methods: {
+        ...mapActions(["getUserInfo"]),
         showMenu(show){
             this.isCollapse = !this.isCollapse
         },
@@ -71,6 +75,14 @@ export default {
         handleClose(key, keyPath) {
             console.log(key, keyPath);
         }
+    },
+    created() {
+        let params = {
+            token:localStorage.getItem("token")
+        }
+        this.getUserInfo(params).then(()=>{
+            console.log(90,this.userInfo)
+        })
     }
 }
 </script>

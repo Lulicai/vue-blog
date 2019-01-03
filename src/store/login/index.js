@@ -2,7 +2,8 @@ import axios from "axios";
 var qs = require("qs");
 
 const state = {
-  resData: ""
+  resData: "",
+  userInfo: null
 };
 
 const actions = {
@@ -21,6 +22,21 @@ const actions = {
       .catch(function(response) {
         console.log(response);
       });
+  },
+  async getUserInfo({ commit }, payload){
+    let config = {
+      method: "post",
+      url: "/api/getUserInfo",
+      data: qs.stringify(payload)
+    };
+    await axios(config)
+      .then(function(response) {
+        // console.log(20,response.data);
+        commit("getUserInfo", response.data);
+      })
+      .catch(function(response) {
+        console.log(response);
+      });
   }
 };
 
@@ -28,6 +44,9 @@ const mutations = {
   LoginPost(state, payload) {
     // console.log(state, payload);
     state.resData = payload;
+  },
+  getUserInfo(state, payload) {
+    state.userInfo = payload;
   }
 };
 

@@ -25,8 +25,8 @@
 </el-dialog>
 </template>
 <script>
-var myreg = /^(((13[0-9]{1})|(14[0-9]{1})|(15[0-9]{1})|(16[0-9]{1})|(17[0-9]{1})|(19[0-9]{1})|(18[0-9]{1}))+\d{8})$/;
 import { mapState, mapActions } from "vuex";
+import { myreg } from "../../common/util.js"
 export default {
     props: ['isShow'],
     data() {

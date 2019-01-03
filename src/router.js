@@ -1,10 +1,11 @@
 import Vue from "vue";
 import Router from "vue-router";
 import Home from "./views/Home.vue";
+import Error from "./views/Error.vue";
 
 Vue.use(Router);
 
-export default new Router({
+const router = new Router({
   mode: "history",
   base: process.env.BASE_URL,
   routes: [
@@ -27,6 +28,11 @@ export default new Router({
           path: "user",
           component: () =>
             import(/* webpackChunkName: "about" */ "./views/AdminIndex.vue")
+        },
+        {
+          path: "class",
+          component: () =>
+            import(/* webpackChunkName: "about" */ "./views/Home.vue")
         }
       ]
     },
@@ -41,6 +47,19 @@ export default new Router({
       name: "Register",
       component: () =>
         import(/* webpackChunkName: "about" */ "./views/Register.vue")
+    },
+    {
+      path: "/errorinfo",
+      component: Error
     }
   ]
 });
+
+router.beforeEach((to, from, next) => {
+  if (to.matched.length === 0) {
+    from.name ? next({ name: from.name}) : next('/errorinfo');
+  } else {
+    next(); //如果匹配到正确跳转
+  }
+})
+export default router;

@@ -18,8 +18,9 @@
 </div>
 </template>
 <script>
-var myreg = /^(((13[0-9]{1})|(14[0-9]{1})|(15[0-9]{1})|(16[0-9]{1})|(17[0-9]{1})|(19[0-9]{1})|(18[0-9]{1}))+\d{8})$/;
+// var myreg = /^(((13[0-9]{1})|(14[0-9]{1})|(15[0-9]{1})|(16[0-9]{1})|(17[0-9]{1})|(19[0-9]{1})|(18[0-9]{1}))+\d{8})$/;
 import { mapState, mapActions } from "vuex";
+import { myreg } from "../common/util.js"
 export default {
   data() {
     var checkAge = (rule, value, callback) => {
@@ -108,7 +109,9 @@ export default {
 .login-container {
   width: 100%;
   height: 100%;
-  background-image: linear-gradient(-90deg, #29bdd9 0%, #276ace 100%);
+  // background-image: linear-gradient(-90deg, #29bdd9 0%, #276ace 100%);
+  background-image:url(../assets/bg.png);
+  background-size: 100%;
   overflow: hidden;
 }
 .login-title {
