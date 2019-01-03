@@ -20,6 +20,7 @@ const actions = {
       })
       .catch(function(response) {
         console.log(response);
+        commit("editUserStatus", response);
       });
   },
   async editUserStatus({ commit }, payload) {
@@ -34,6 +35,7 @@ const actions = {
       })
       .catch(function(response) {
         console.log(response);
+        commit("editUserStatus", response);
       });
   },
   async editUser({ commit }, payload) {
@@ -48,6 +50,7 @@ const actions = {
       })
       .catch(function(response) {
         console.log(response);
+        commit("editUser", response);
       });
   }
 };

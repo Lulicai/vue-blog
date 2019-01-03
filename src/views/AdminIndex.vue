@@ -5,6 +5,9 @@
       <el-breadcrumb-item :to="{ path: '/admin' }">首页</el-breadcrumb-item>
       <el-breadcrumb-item><a href="/admin/user">用户管理</a></el-breadcrumb-item>
     </el-breadcrumb>
+    <el-row class="create_new_user">
+      <el-button type="primary" @click="createNewUser">创建新用户</el-button>
+    </el-row>
     <el-table
       :data="tableData"
       border
@@ -39,7 +42,7 @@
     <el-dialog :title="disabled?'用户查看':'用户编辑'" :visible.sync="dialogUserTableVisible" width="40%">
       <el-form :model="form" :rules="rules" ref="form">
         <el-form-item label="手机号" :label-width="formLabelWidth" prop="telephone">
-          <el-input v-model="form.telephone" autocomplete="off" :disabled="disabled"></el-input>
+          <el-input v-model="form.telephone" autocomplete="off" :disabled="disabled" maxlength="11"></el-input>
         </el-form-item>
         <el-form-item label="权限" :label-width="formLabelWidth" prop="rank">
           <el-select v-model="form.rank" placeholder="请选择管理员权限" :disabled="disabled">
@@ -48,12 +51,16 @@
             <el-option label="三级管理员" value="3"></el-option>
           </el-select>
         </el-form-item>
+        <el-form-item label="备注" prop="remark" :label-width="formLabelWidth">
+          <el-input :disabled="disabled" v-model="form.remark" autocomplete="off" type="textarea" :rows="2" placeholder="请输入内容"></el-input>
+        </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogUserTableVisible = false">取 消</el-button>
         <el-button type="primary" @click="editUserMessage('form')">确 定</el-button>
       </div>
     </el-dialog>
+    <NewUserDialog @testchange="toshow" :isShow="isShow" ></NewUserDialog>
     <el-pagination
     :page-size="10"
     background
@@ -67,10 +74,12 @@
 <script>
 var myreg = /^(((13[0-9]{1})|(14[0-9]{1})|(15[0-9]{1})|(16[0-9]{1})|(17[0-9]{1})|(19[0-9]{1})|(18[0-9]{1}))+\d{8})$/;
 import { mapState, mapActions } from "vuex";
+import NewUserDialog from "../components/backend/NewUserDialog.vue"
 export default {
   name:'adminIndex',
   data() {
     return {
+      isShow:false,
       tableData: [],
       pageNo: 1,
       count: null,
@@ -78,10 +87,11 @@ export default {
       form: {
           telephone: "",
           rank: "",
-          id: ""
+          id: "",
+          remark:""
       },
       disabled: false,
-      formLabelWidth: '80px',
+      formLabelWidth: "80px",
       rules: {
         telephone: [
           { required: true, message: '请输入手机号', trigger: 'blur'},
@@ -93,6 +103,7 @@ export default {
     }
     }
   },
+  components:{NewUserDialog},
   computed: {
     ...mapState({
       resData: state => state.user.resData,
@@ -107,11 +118,20 @@ export default {
       this.form.id = row.id;
       this.form.telephone = row.telephone;
       this.form.rank = row.rank;
+      this.form.remark = row.remark;
       if(state){
         this.disabled = true;
       }else {
         this.disabled = false;
       }
+    },
+    createNewUser(){
+      // console.log(3333)
+      this.isShow = true;
+    },
+    toshow() {
+      this.isShow = false;
+      this.getList(1);
     },
     handleCurrentChange(val){
       this.getList(val);
@@ -138,9 +158,13 @@ export default {
       })
     },
     editUserMessage(form) {
+      if(this.disabled){
+        this.dialogUserTableVisible = false;
+        return;
+      }
       this.$refs[form].validate((valid) => {
          if (valid) {
-           console.log(33333)
+          //  console.log(33333)
            if(!myreg.test(this.form.telephone)) {
               this.$message({
                 type: "warning",
@@ -152,8 +176,9 @@ export default {
                   id:this.form.id,
                   telephone:this.form.telephone,
                   rank:this.form.rank,
+                  remark:this.form.remark
               }
-              // console.log(155,params)
+              console.log(155,params)
               this.editUser(params).then(()=>{
                 if(this.userRes.code == "0000"){
                   this.$message({
@@ -194,12 +219,12 @@ export default {
       })
     }
   },
-  mounted(){
+  mounted() {
     if(!localStorage.getItem("token")){
-        window.location.href = "http://localhost:8000/login"
+      window.location.href = "http://localhost:8000/login"
     }
   },
-  created(){
+  created() {
     this.getList(this.pageNo);
   }
 };
@@ -213,5 +238,8 @@ export default {
 }
 .el-pagination {
   float: right;
+}
+.create_new_user {
+  margin-top: 20px;
 }
 </style>
