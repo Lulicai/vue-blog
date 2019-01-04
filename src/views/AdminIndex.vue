@@ -242,7 +242,24 @@ export default {
 <style>
 .about {
   height: 100%;
+  animation: myanimation 500ms ease-in-out 1;
+  -moz-animation: myanimation 500ms ease-in-out 1;	/* Firefox */
+  -webkit-animation: myanimation 500ms ease-in-out 1;	/* Safari 和 Chrome */
+  -o-animation: myanimation 500ms ease-in-out 1;	/* Opera */
+  box-shadow: 0 0 5px 5px rgba(0, 0, 0, 0.2);
+  padding: 20px;
+  overflow: hidden;
 }
+@keyframes myanimation {
+    0% {
+        transform: translate(200px,0px);
+        box-shadow: 0 0 5px 5px rgba(0, 0, 0, 0.2)
+    }
+    100% {
+        transform: translate(0px,0px);
+        box-shadow: 0 0 5px 5px rgba(0, 0, 0, 0.2)
+    }
+  }
 .el-table {
   margin: 20px 0px;
 }

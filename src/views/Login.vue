@@ -10,10 +10,10 @@
         <el-input type="password" v-model="ruleForm2.pass" autocomplete="off" maxlength="6"></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="submitForm('ruleForm2')">提交</el-button>
-        <el-button @click="resetForm('ruleForm2')">重置</el-button>
+        <el-button type="primary" @click="submitForm('ruleForm2')" size="small" class="login-button">登录</el-button>
       </el-form-item>
     </el-form>
+    <router-link to="/register" class="to-register"><a>注册--></a></router-link>
   </div>
 </div>
 </template>
@@ -89,22 +89,24 @@ export default {
           return false;
         }
       });
-    },
-    resetForm(formName) {
-      this.$refs[formName].resetFields();
     }
+    // resetForm(formName) {
+    //   this.$refs[formName].resetFields();
+    // }
   }
 };
 </script>
 <style lang="less" scoped>
 .login-panel {
   width: 300px;
-  margin: 0 auto;
   margin-top: 100px;
   background-color: rgba(255, 255, 255, 0.5);
-  padding: 15px;
+  padding: 30px;
   border-radius: 10px;
   box-shadow: 0px 0px 10px 8px rgba(0, 0, 0, 0.3);
+  position: absolute;
+  top: 150px;
+  right: 100px;
 }
 .login-container {
   width: 100%;
@@ -115,20 +117,35 @@ export default {
   overflow: hidden;
 }
 .login-title {
+  position: absolute;
+  top: 10px;
+  right: 180px;
   text-align: center;
   margin-top: 100px;
-  animation: myfirst 2s infinite;
-  -moz-animation: myfirst 2s infinite;	/* Firefox */
-  -webkit-animation: myfirst 2s infinite;	/* Safari 和 Chrome */
-  -o-animation: myfirst 2s infinite;	/* Opera */
-}
-@keyframes myfirst{
+  // transform-origin:20% 20%;
+  animation: myfirst 2s cubic-bezier(0.680, 0, 0.265, 1) 1;
+  -moz-animation: myfirst 2s cubic-bezier(0.680, -0.550, 0.265, 1.550) 1;	/* Firefox */
+  -webkit-animation: myfirst 2s cubic-bezier(0.680, -0.550, 0.265, 1.550) 1;	/* Safari 和 Chrome */
+  -o-animation: myfirst 2s cubic-bezier(0.680, -0.550, 0.265, 1.550) 1;	/* Opera */
+  }
+@keyframes myfirst {
   10% {
-    transform: rotate(0deg);
+    transform: translate(400px,0px) rotate(0deg);
   }
   100% {
-    transform: rotate(360deg);
+    transform: translate(0px,0px) rotate(360deg);
   }
 }
-
+.el-button {
+  padding: 12px 100px;
+}
+.to-register {
+  float: right;
+  text-decoration: none;
+  font-size: 14px
+}
+.login-button{
+  font-size: 14px;
+  letter-spacing: 5px
+}
 </style>

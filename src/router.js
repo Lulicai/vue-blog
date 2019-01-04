@@ -43,6 +43,11 @@ const router = new Router({
           path: "havenorank",
           meta: ["1", "2", "3"],
           component: NoRank
+        },
+        {
+          path: "/errorinfo",
+          meta: ["1", "2", "3"],
+          component: Error
         }
       ]
     },
@@ -59,11 +64,6 @@ const router = new Router({
       meta: ["1", "2", "3"],
       component: () =>
         import(/* webpackChunkName: "about" */ "./views/Register.vue")
-    },
-    {
-      path: "/errorinfo",
-      meta: ["1", "2", "3"],
-      component: Error
     }
   ]
 });

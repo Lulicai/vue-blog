@@ -19,7 +19,7 @@
         <el-input type="password" v-model="ruleForm2.checkPass" autocomplete="off" maxlength="6"></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="submitForm('ruleForm2')">提交</el-button>
+        <el-button type="primary" @click="submitForm('ruleForm2')">注册</el-button>
         <el-button @click="resetForm('ruleForm2')">重置</el-button>
       </el-form-item>
     </el-form>
@@ -128,6 +128,9 @@ export default {
   padding: 15px;
   border-radius: 10px;
   box-shadow: 0px 0px 10px 8px rgba(0, 0, 0, 0.3);
+  position: absolute;
+  top: 150px;
+  right: 100px;
 }
 .login-container {
   width: 100%;
@@ -138,19 +141,23 @@ export default {
   overflow: hidden;
 }
 .login-title {
+  position: absolute;
+  top: 10px;
+  right: 180px;
   text-align: center;
   margin-top: 100px;
   animation: myfirst 2s infinite;
-  -moz-animation: myfirst 2s infinite;	/* Firefox */
-  -webkit-animation: myfirst 2s infinite;	/* Safari 和 Chrome */
-  -o-animation: myfirst 2s infinite;	/* Opera */
+  animation: myfirst 2s cubic-bezier(0.680, 0, 0.265, 1) 1;
+  -moz-animation: myfirst 2s cubic-bezier(0.680, -0.550, 0.265, 1.550) 1;	/* Firefox */
+  -webkit-animation: myfirst 2s cubic-bezier(0.680, -0.550, 0.265, 1.550) 1;	/* Safari 和 Chrome */
+  -o-animation: myfirst 2s cubic-bezier(0.680, -0.550, 0.265, 1.550) 1;	/* Opera */
 }
-@keyframes myfirst{
+@keyframes myfirst {
   10% {
-    transform: rotate(0deg);
+    transform: translate(400px,0px) rotate(0deg);
   }
   100% {
-    transform: rotate(360deg);
+    transform: translate(0px,0px) rotate(360deg);
   }
 }
 </style>

@@ -11,8 +11,8 @@
             active-text-color="#3eaf7c"
             router
         >
-            <template v-for="(menu, index) in menus">
-                <el-menu-item :index="menu.path">
+            <template v-for="(menu,index) in menus">
+                <el-menu-item :index="menu.path" :key="index">
                     <i :class="menu.icon"></i>
                     <span slot="title">{{menu.name}}</span>
                 </el-menu-item>
@@ -45,7 +45,6 @@
 </template>
 <script>
 import menuData from "../../common/menu.js";
-import { mapState, mapActions } from "vuex";
 export default {
     data() {
       return {
@@ -53,13 +52,7 @@ export default {
         menus: menuData
       };
     },
-    computed: {
-      ...mapState({
-        userInfo: state => state.login.userInfo
-      })
-    },
     methods: {
-        ...mapActions(["getUserInfo"]),
         showMenu(show){
             this.isCollapse = !this.isCollapse
         },
@@ -69,17 +62,6 @@ export default {
         handleClose(key, keyPath) {
             console.log(key, keyPath);
         }
-    },
-    beforeCreate() {
-        // let params = {
-        //     token:localStorage.getItem("token")
-        // }
-        // this.$store.dispatch("getUserInfo",params).then(()=>{
-        //     console.log(this.userInfo)
-        // })
-        // this.getUserInfo(params).then(()=>{
-        //     console.log(90,this.userInfo)
-        // })
     }
 }
 </script>
@@ -92,6 +74,7 @@ export default {
   .el-main {
     background-color: #E9EEF3;
     color: #333;
+    padding: 10px;
   }
   .el-menu{
       border-right: none;
