@@ -11,12 +11,6 @@
             active-text-color="#3eaf7c"
             router
         >
-            <!-- <el-menu-item index="1">
-                <div class="logo-wenzi">
-                    <img src="../../assets/logo.png" alt="">
-                    <span>LILY BLOG</span>
-                </div>
-            </el-menu-item> -->
             <template v-for="(menu, index) in menus">
                 <el-menu-item :index="menu.path">
                     <i :class="menu.icon"></i>
@@ -76,13 +70,16 @@ export default {
             console.log(key, keyPath);
         }
     },
-    created() {
-        let params = {
-            token:localStorage.getItem("token")
-        }
-        this.getUserInfo(params).then(()=>{
-            console.log(90,this.userInfo)
-        })
+    beforeCreate() {
+        // let params = {
+        //     token:localStorage.getItem("token")
+        // }
+        // this.$store.dispatch("getUserInfo",params).then(()=>{
+        //     console.log(this.userInfo)
+        // })
+        // this.getUserInfo(params).then(()=>{
+        //     console.log(90,this.userInfo)
+        // })
     }
 }
 </script>

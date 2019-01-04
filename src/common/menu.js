@@ -7,12 +7,12 @@ const menuData = [
   },
   {
     name: "分类管理",
-    icon: "el-icon-menu",
+    icon: "el-icon-edit",
     path: "/admin/class"
   },
   {
     name: "文章管理",
-    icon: "el-icon-menu",
+    icon: "el-icon-document",
     path: "/admin/artical"
   }
 ];

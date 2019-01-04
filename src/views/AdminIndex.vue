@@ -34,8 +34,8 @@
           >
         <template slot-scope="scope">
           <el-button @click="handleClick(scope.row,true)" type="text" size="small">查看</el-button>
-          <el-button type="text" size="small" @click="handleClick(scope.row,false)">编辑</el-button>
-          <el-button @click="editUserStatusClick(scope.row)" type="text" size="small">{{parseInt(scope.row.status)?"启用":"禁用"}}</el-button>
+          <el-button type="text" size="small" @click="handleClick(scope.row,false)" :disabled="rankcontrol">编辑</el-button>
+          <el-button @click="editUserStatusClick(scope.row)" type="text" size="small" :disabled="rankcontrol">{{parseInt(scope.row.status)?"启用":"禁用"}}</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -84,6 +84,7 @@ export default {
       pageNo: 1,
       count: null,
       dialogUserTableVisible:false,
+      rankcontrol:false,
       form: {
           telephone: "",
           rank: "",
@@ -107,7 +108,8 @@ export default {
   computed: {
     ...mapState({
       resData: state => state.user.resData,
-      userRes: state => state.user.userRes
+      userRes: state => state.user.userRes,
+      userInfo:state => state.login.userInfo
     })
   },
   methods: {
@@ -178,7 +180,7 @@ export default {
                   rank:this.form.rank,
                   remark:this.form.remark
               }
-              console.log(155,params)
+              // console.log(155,params)
               this.editUser(params).then(()=>{
                 if(this.userRes.code == "0000"){
                   this.$message({
@@ -217,7 +219,14 @@ export default {
           })
         }
       })
-    }
+    },
+    rankControl(){
+      if(this.userInfo.data.rank === "2"){
+        this.rankcontrol = true
+      }else if(this.userInfo.data.rank === "1")(
+        this.rankcontrol = false
+      )
+    },
   },
   mounted() {
     if(!localStorage.getItem("token")){
@@ -226,6 +235,7 @@ export default {
   },
   created() {
     this.getList(this.pageNo);
+    this.rankControl();
   }
 };
 </script>
