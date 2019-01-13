@@ -32,7 +32,7 @@
                             <el-badge :value="12" class="item">
                                 <i class="el-icon-bell"></i>
                             </el-badge>         
-                            <span class="quit-user">退出</span>
+                            <span class="quit-user" @click="quit">退出</span>
                         </div>
                     </el-col>
                 </el-row>
@@ -61,6 +61,10 @@ export default {
         },
         handleClose(key, keyPath) {
             console.log(key, keyPath);
+        },
+        quit(){
+            localStorage.removeItem("token");
+            this.$router.push({path: '/login'})
         }
     }
 }

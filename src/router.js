@@ -71,27 +71,36 @@ const router = new Router({
 router.beforeEach((to, from, next) => {
   if (to.path === "/login") {
     next();
+  } else if (to.path === "/register") {
+    next();
   } else if (to.matched.length === 0) {
     //没有匹配到的路径跳转到错误页面
     from.name ? next({ name: from.name}) : next('/errorinfo');
   } else {
     //查看权限
-    let params = {
-      token: localStorage.getItem("token")
-    };
-    router.app.$options.store.dispatch("getUserInfo", params).then(() => {
-      // console.log(74, router.app.$options.store.state.login.userInfo.data.rank);
-      let rank = router.app.$options.store.state.login.userInfo.data.rank;
-      if (rank === "") {
-        next("/login");
-      } else {
-        if (to.matched.every(item => item.meta.indexOf(rank) > -1)) {
-          next();
+    if (to.path.indexOf("admin") > -1) {
+      let params = {
+        token: localStorage.getItem("token")
+      };
+      router.app.$options.store.dispatch("getUserInfo", params).then(() => {
+        // console.log(74, router.app.$options.store.state.login.userInfo.data.rank);
+        let rank = router.app.$options.store.state.login.userInfo.data.rank;
+        if (rank === "") {
+          next("/login");
         } else {
-          next("/admin/havenorank");
+          if (to.matched.every(item => item.meta.indexOf(rank) > -1)) {
+            next();
+          } else {
+            next("/admin/havenorank");
+          }
         }
+      });
+      if (!localStorage.getItem("token")) {
+        next("/login");
       }
-    });
+    } else {
+      next();
+    }
   }
 });
 

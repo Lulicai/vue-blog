@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    sdasdda
+    sdasdda阿达达达萨说
   </div>
 </template>
 
