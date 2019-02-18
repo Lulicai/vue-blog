@@ -37,7 +37,7 @@ const router = new Router({
           path: "class",
           meta: ["1", "2", "3"],
           component: () =>
-            import(/* webpackChunkName: "about" */ "./views/Home.vue")
+            import(/* webpackChunkName: "about" */ "./views/classify.vue")
         },
         {
           path: "havenorank",
@@ -83,12 +83,12 @@ router.beforeEach((to, from, next) => {
         token: localStorage.getItem("token")
       };
       router.app.$options.store.dispatch("getUserInfo", params).then(() => {
-        // console.log(74, router.app.$options.store.state.login.userInfo.data.rank);
-        let rank = router.app.$options.store.state.login.userInfo.data.rank;
-        if (rank === "") {
+        console.log(74, router.app.$options.store.state.login.userInfo);
+        let userInfo = router.app.$options.store.state.login.userInfo;
+        if(router.app.$options.store.state.login.userInfo.code == 401 || !userInfo.data.rank){
           next("/login");
         } else {
-          if (to.matched.every(item => item.meta.indexOf(rank) > -1)) {
+          if (to.matched.every(item => item.meta.indexOf(userInfo.data.rank) > -1)) {
             next();
           } else {
             next("/admin/havenorank");

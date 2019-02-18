@@ -4,6 +4,7 @@ import App from "./App.vue";
 import router from "./router";
 import store from "./store/index.js";
 import "element-ui/lib/theme-chalk/index.css";
+import "./common/css/global.css";
 import moment from "moment";
 Vue.use(ElementUI);
 Vue.prototype.$moment = moment;
