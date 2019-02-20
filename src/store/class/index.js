@@ -4,15 +4,16 @@ var qs = require("qs");
 const state = {
   resData: "",
   classRes: null,
-  newClassRes: null
+  newClassRes: null,
+  deleteClassRes: null
 };
 
 const actions = {
   async getClassList({ commit }, payload) {
     // console.log(payload)
     let config = {
-      method: "get",
-      url: "/api/classify",
+      method: "post",
+      url: "/api/getAllClass",
       data: qs.stringify(payload)
     };
     await axios(config)
@@ -53,6 +54,16 @@ const actions = {
         console.log(response);
         commit("createClass", response);
       });
+  },
+  async deleteClass({ commit }, payload) {
+    let config = {
+      method: "post",
+      url: "/api/deleteClass",
+      data: qs.stringify(payload)
+    };
+    await axios(config).then(function(response) {
+      commit("deleteClass", response.data);
+    });
   }
 };
 
@@ -66,6 +77,9 @@ const mutations = {
   },
   createClass(state, payload) {
     state.newClassRes = payload;
+  },
+  deleteClass(state, payload) {
+    state.deleteClassRes = payload;
   }
 };
 

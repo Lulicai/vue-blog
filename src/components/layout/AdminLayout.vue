@@ -1,10 +1,11 @@
 <template>
     <el-container class="panel">
         <el-menu 
-            default-active="/admin/user" 
+            :default-active="defaultActive" 
             class="el-menu-vertical-demo" 
             @open="handleOpen" 
             @close="handleClose" 
+            @select="handleSelect"
             :collapse="isCollapse"
             background-color="#001529"
             text-color="#ffffff"
@@ -49,7 +50,8 @@ export default {
     data() {
       return {
         isCollapse: false,
-        menus: menuData
+        menus: menuData,
+        defaultActive:"/admin/user"
       };
     },
     methods: {
@@ -62,10 +64,17 @@ export default {
         handleClose(key, keyPath) {
             console.log(key, keyPath);
         },
+        handleSelect(data){
+            // console.log(data)
+            localStorage.setItem('activeOption',data)
+        },
         quit(){
             localStorage.removeItem("token");
             this.$router.push({path: '/login'})
         }
+    },
+    created(){
+        this.defaultActive = localStorage.getItem('activeOption')
     }
 }
 </script>

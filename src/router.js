@@ -83,7 +83,6 @@ router.beforeEach((to, from, next) => {
         token: localStorage.getItem("token")
       };
       router.app.$options.store.dispatch("getUserInfo", params).then(() => {
-        console.log(74, router.app.$options.store.state.login.userInfo);
         let userInfo = router.app.$options.store.state.login.userInfo;
         if(router.app.$options.store.state.login.userInfo.code == 401 || !userInfo.data.rank){
           next("/login");

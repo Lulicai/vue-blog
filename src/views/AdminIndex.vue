@@ -240,12 +240,7 @@ export default {
 };
 </script>
 <style>
-.el-table {
-  margin: 20px 0px;
-}
-.el-pagination {
-  float: right;
-}
+
 .create_new_user {
   margin-top: 20px;
 }
