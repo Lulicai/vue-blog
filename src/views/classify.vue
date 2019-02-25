@@ -137,7 +137,6 @@ export default {
       let params = {
         pageNo: page
       };
-      console.log(125, params);
       this.getClassList(params).then(() => {
         // console.log(this.resData)
         if (this.resData.code == "0000") {

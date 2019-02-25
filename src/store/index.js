@@ -4,6 +4,7 @@ import login from "./login/";
 import register from "./register/";
 import user from "./user/";
 import classify from "./class/";
+import article from "./article/";
 
 Vue.use(Vuex);
 
@@ -12,6 +13,7 @@ export default new Vuex.Store({
     login,
     register,
     user,
-    classify
+    classify,
+    article
   }
 });

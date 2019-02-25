@@ -40,6 +40,12 @@ const router = new Router({
             import(/* webpackChunkName: "about" */ "./views/classify.vue")
         },
         {
+          path: "article",
+          meta: ["1", "2", "3"],
+          component: () =>
+            import(/* webpackChunkName: "about" */ "./views/Article.vue")
+        },
+        {
           path: "havenorank",
           meta: ["1", "2", "3"],
           component: NoRank

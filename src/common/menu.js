@@ -13,7 +13,7 @@ const menuData = [
   {
     name: "文章管理",
     icon: "el-icon-document",
-    path: "/admin/artical"
+    path: "/admin/article"
   }
 ];
 module.exports = menuData;
