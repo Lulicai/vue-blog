@@ -14,13 +14,10 @@
       <el-table-column fixed prop="updateAt" :formatter="dateForm" label="创建日期"></el-table-column>
       <el-table-column prop="title" label="文章标题"></el-table-column>
       <el-table-column prop="classType" label="分类名称"></el-table-column>
-      <!-- <el-table-column
-      prop="province"
-      label="作者">
-      </el-table-column>-->
+      <el-table-column prop="user.telephone" label="作者"></el-table-column>
       <el-table-column label="操作">
         <template slot-scope="scope">
-          <el-button @click="handleClick(scope.row)" type="text" size="small">查看详情</el-button>
+          <el-button @click="goArticleDetail(scope.row)" type="text" size="small">查看详情</el-button>
           <el-button type="text" size="small">编辑文章</el-button>
         </template>
       </el-table-column>
@@ -42,7 +39,7 @@ export default {
     return {
       tableData: [],
       pageNo: 1,
-      count: null,
+      count: null
     };
   },
   computed: {
@@ -52,17 +49,17 @@ export default {
   },
   methods: {
     ...mapActions(["getArticleList"]),
-    handleClick(row) {
-      console.log(row);
+    goArticleDetail(row) {
+        this.$router.push({name:'articledetail',params:{articleId:'asdada'}});
     },
-    createNewArticle(){
-
+    createNewArticle() {
+      this.$router.push({ path: "/admin/createarticle" });
     },
     handleCurrentChange(val) {
       this.getList(val);
     },
     dateForm(params) {
-      return this.$moment(params).format('YYYY-MM-DD');
+      return this.$moment(params).format("YYYY-MM-DD");
     },
     getList(page) {
       this.pageNo = page;
@@ -70,12 +67,11 @@ export default {
         pageNo: page
       };
       this.getArticleList(params).then(() => {
-        console.log(75, this.articleListTable);
         if (this.articleListTable.code === "0000") {
           this.tableData = this.articleListTable.data.rows;
           this.count = this.articleListTable.data.count;
-        }else{
-            this.$message({
+        } else {
+          this.$message({
             message: this.resData.message,
             type: "warning"
           });

@@ -4,7 +4,8 @@ var qs = require("qs");
 const state = {
   articleContent: null,
   editRes: null,
-  articleListTable: null
+  articleListTable: null,
+  createArticleRes: null
 };
 
 const actions = {
@@ -21,12 +22,46 @@ const actions = {
       .catch(function(response) {
         commit("getArticleList", response);
       });
+  },
+  async createNewArticle({ commit }, payload){
+    let config = {
+      method: "post",
+      url: "/api/createArticle",
+      data: qs.stringify(payload)
+    };
+    await axios(config)
+      .then(function(response) {
+        commit("createNewArticle", response.data);
+      })
+      .catch(function(response) {
+        commit("createNewArticle", response);
+      });
+  },
+  async getArticleById({ commit }, payload){
+    let config = {
+      method: "post",
+      url: "/api/getArticleById",
+      data: qs.stringify(payload)
+    };
+    await axios(config)
+      .then(function(response) {
+        commit("getArticleById", response.data);
+      })
+      .catch(function(response) {
+        commit("getArticleById", response);
+      });
   }
 };
 
 const mutations = {
   getArticleList(state, payload) {
     state.articleListTable = payload;
+  },
+  createNewArticle(state, payload) {
+    state.createArticleRes = payload;
+  },
+  getArticleById(state, payload) {
+    state.articleContent = payload;
   }
 };
 

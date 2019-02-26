@@ -40,6 +40,19 @@ const router = new Router({
             import(/* webpackChunkName: "about" */ "./views/classify.vue")
         },
         {
+          path: "createarticle",
+          meta: ["1", "2", "3"],
+          component: () =>
+            import(/* webpackChunkName: "about" */ "./views/NewArticle.vue")
+        },
+        {
+          path: "articledetail",
+          name: "articledetail",
+          meta: ["1", "2", "3"],
+          component: () =>
+            import(/* webpackChunkName: "about" */ "./views/ArticleDetail.vue")
+        },
+        {
           path: "article",
           meta: ["1", "2", "3"],
           component: () =>
