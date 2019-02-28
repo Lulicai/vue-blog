@@ -69,7 +69,7 @@ export default {
             localStorage.setItem('activeOption',data)
         },
         quit(){
-            localStorage.removeItem("token");
+            localStorage.clear();
             this.$router.push({path: '/login'})
         }
     },

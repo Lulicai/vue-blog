@@ -80,15 +80,16 @@ export default {
   },
   computed: {
     ...mapState({
-      createArticleRes: state => state.article.createArticleRes,
-      resData: state => state.classify.resData
+      resData: state => state.classify.resData,
+      articleContent: state => state.article.articleContent,
+      editRes: state => state.article.editRes
     }),
     editor() {
       return this.$refs.myQuillEditor.quill;
     }
   },
   methods: {
-    ...mapActions(["createNewArticle", "getClassList"]),
+    ...mapActions(["getArticleById", "getClassList","editArticleById"]),
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
@@ -99,14 +100,14 @@ export default {
             brief: this.ruleForm.brief,
             content: "asdasd",
             contentToMark: this.ruleForm.content,
-            token: localStorage.getItem("token")
+            token: localStorage.getItem("token"),
+            id: this.$route.query.articleId
           };
-          this.createNewArticle(params).then(() => {
-            console.log(this.createArticleRes);
-            if (this.createArticleRes.code == "0000") {
+          this.editArticleById(params).then(() => {
+            if (this.editRes.code == "0000") {
               this.$notify({
                 title: "成功",
-                message: "文章创建成功",
+                message: "文章修改成功",
                 type: "success"
               });
               this.$router.push('/admin/article');
@@ -121,15 +122,26 @@ export default {
     resetForm(formName) {
       this.$refs[formName].resetFields();
     },
+    getArticleDetail(){
+      let params = {
+        id: this.$route.query.articleId
+      };
+      this.getArticleById(params).then(()=>{
+        this.ruleForm.name = this.articleContent.data.title;
+        this.ruleForm.classType = this.articleContent.data.classType;
+        this.ruleForm.brief = this.articleContent.data.brief;
+        this.ruleForm.content = this.articleContent.data.contentToMark;
+      })
+
+    },
     getAllClassType() {
-      this.getClassList().then(() => {
-        console.log(87, this.resData);
-      });
+      this.getClassList()
     }
   },
   created() {
     //获取所有的classType
     this.getAllClassType();
+    this.getArticleDetail();
   }
 };
 </script>

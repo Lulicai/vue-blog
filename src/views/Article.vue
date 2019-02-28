@@ -18,7 +18,7 @@
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button @click="goArticleDetail(scope.row)" type="text" size="small">查看详情</el-button>
-          <el-button type="text" size="small">编辑文章</el-button>
+          <el-button type="text" size="small" @click="goEditArticle(scope.row)" >编辑文章</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -50,7 +50,16 @@ export default {
   methods: {
     ...mapActions(["getArticleList"]),
     goArticleDetail(row) {
-        this.$router.push({name:'articledetail',params:{articleId:'asdada'}});
+      this.$router.push({
+        path: "articledetail",
+        query: { articleId:  row.id}
+      });
+    },
+    goEditArticle(row){
+      this.$router.push({
+        path: "editarticle",
+        query: { articleId:  row.id}
+      });
     },
     createNewArticle() {
       this.$router.push({ path: "/admin/createarticle" });

@@ -39,9 +39,8 @@ const actions = {
   },
   async getArticleById({ commit }, payload){
     let config = {
-      method: "post",
-      url: "/api/getArticleById",
-      data: qs.stringify(payload)
+      method: "get",
+      url: "/api/getArticleById/" + payload.id
     };
     await axios(config)
       .then(function(response) {
@@ -49,6 +48,20 @@ const actions = {
       })
       .catch(function(response) {
         commit("getArticleById", response);
+      });
+  },
+  async editArticleById({ commit }, payload){
+    let config = {
+      method: "post",
+      url: "/api/editArticleById",
+      data: qs.stringify(payload)
+    };
+    await axios(config)
+      .then(function(response) {
+        commit("editArticleById", response.data);
+      })
+      .catch(function(response) {
+        commit("editArticleById", response);
       });
   }
 };
@@ -62,6 +75,9 @@ const mutations = {
   },
   getArticleById(state, payload) {
     state.articleContent = payload;
+  },
+  editArticleById(state, payload) {
+    state.editRes = payload;
   }
 };
 

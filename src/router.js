@@ -46,6 +46,12 @@ const router = new Router({
             import(/* webpackChunkName: "about" */ "./views/NewArticle.vue")
         },
         {
+          path: "editarticle",
+          meta: ["1", "2", "3"],
+          component: () =>
+            import(/* webpackChunkName: "about" */ "./views/EditArticle.vue")
+        },
+        {
           path: "articledetail",
           name: "articledetail",
           meta: ["1", "2", "3"],
