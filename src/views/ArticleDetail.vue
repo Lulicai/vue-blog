@@ -62,7 +62,4 @@ export default {
   border-top: 1px solid #ccc;
   margin-top: 15px;
 }
-.maincontent_style {
-  /* text-align: center; */
-}
 </style>
