@@ -30,6 +30,25 @@
       <el-form-item label="文章简介" prop="brief">
         <el-input v-model="ruleForm.brief"></el-input>
       </el-form-item>
+      <el-form-item label="文章头图">
+        <el-upload
+          class="upload-demo"
+          ref="upload"
+          :limit="1"
+          action
+          :on-preview="handlePreview"
+          :on-remove="handleRemove"
+          :file-list="fileList"
+          :auto-upload="true"
+          :http-request="uploadSectionFile"
+          accept=".jpeg, .png, .jpg"
+          :on-exceed="handleExceed"
+          list-type="picture"
+        >
+          <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
+          <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+        </el-upload>
+      </el-form-item>
       <el-form-item label="文章正文" prop="content">
         <quill-editor
           v-model="ruleForm.content"
@@ -55,6 +74,7 @@ export default {
       editorOption: {
         // some quill options
       },
+      fileList: [],
       ruleForm: {
         name: "",
         classType: "",
@@ -81,14 +101,57 @@ export default {
   computed: {
     ...mapState({
       createArticleRes: state => state.article.createArticleRes,
-      resData: state => state.classify.resData
+      resData: state => state.classify.resData,
+      uploadRes: state => state.article.uploadRes
     }),
     editor() {
       return this.$refs.myQuillEditor.quill;
     }
   },
   methods: {
-    ...mapActions(["createNewArticle", "getClassList"]),
+    ...mapActions(["createNewArticle", "getClassList", "uploadfile"]),
+    handleRemove(file, fileList) {
+      console.log(file, fileList);
+    },
+    handlePreview(file) {
+      console.log(112, file);
+    },
+    handleExceed(files, fileList) {
+      this.$message.warning(
+        `当前限制选择 1 个文件，本次选择了 ${
+          files.length
+        } 个文件，共选择了 ${files.length + fileList.length} 个文件`
+      );
+    },
+    uploadSectionFile(param) {
+      const isJPG =
+        param.file.type === "image/jpeg" || param.file.type === "image/png";
+      const isLt2M = param.file.size / 1024 / 1024 < 2;
+      if (!isJPG) {
+        this.$message.error("上传头像图片只能是 JPG或者PNG 格式!");
+        return false;
+      }
+      if (!isLt2M) {
+        this.$message.error("上传头像图片大小不能超过 2MB!");
+        return false;
+      }
+      var fileObj = param.file;
+      //调用上传图片的接口
+      var form = new FormData();
+      // 文件对象
+      form.append("file", fileObj);
+      this.uploadfile(form).then(() => {
+        if (this.uploadRes.code == "0000") {
+          this.$message.success("上传图片成功");
+          console.log(138, this.fileList);
+          let data = {
+            name: this.uploadRes.data.name,
+            url: this.uploadRes.data.imgUrl
+          };
+          this.fileList.push(data);
+        }
+      });
+    },
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
@@ -109,7 +172,7 @@ export default {
                 message: "文章创建成功",
                 type: "success"
               });
-              this.$router.push('/admin/article');
+              this.$router.push("/admin/article");
             }
           });
         } else {
