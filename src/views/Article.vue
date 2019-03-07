@@ -19,6 +19,7 @@
         <template slot-scope="scope">
           <el-button @click="goArticleDetail(scope.row)" type="text" size="small">查看详情</el-button>
           <el-button type="text" size="small" @click="goEditArticle(scope.row)" >编辑文章</el-button>
+          <el-button type="text" size="small" @click="deleteArticle(scope.row)" >删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -44,11 +45,12 @@ export default {
   },
   computed: {
     ...mapState({
-      articleListTable: state => state.article.articleListTable
+      articleListTable: state => state.article.articleListTable,
+      deleteArticleRes: state => state.article.deleteArticleRes
     })
   },
   methods: {
-    ...mapActions(["getArticleList"]),
+    ...mapActions(["getArticleList","deleteArticleById"]),
     goArticleDetail(row) {
       this.$router.push({
         path: "articledetail",
@@ -60,6 +62,17 @@ export default {
         path: "editarticle",
         query: { articleId:  row.id}
       });
+    },
+    deleteArticle(row){
+      let params = {
+        id:row.id
+      }
+      this.deleteArticleById(params).then(()=>{
+        if(this.deleteArticleRes.code == '0000'){
+          this.$message.success('删除文章成功');
+          this.getList(this.pageNo);
+        }
+      })
     },
     createNewArticle() {
       this.$router.push({ path: "/admin/createarticle" });

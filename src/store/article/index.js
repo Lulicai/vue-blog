@@ -7,7 +7,8 @@ const state = {
   articleListTable: null,
   createArticleRes: null,
   uploadRes: null,
-  deleteImgRes: null
+  deleteImgRes: null,
+  deleteArticleRes: null
 };
 
 const actions = {
@@ -96,7 +97,21 @@ const actions = {
       .catch(function (response) {
         commit("deleteFile", response);
       });
-  }
+  },
+  async deleteArticleById({ commit }, payload) {
+    let config = {
+      method: "post",
+      url: "/api/deleteArticleById",
+      data: payload
+    };
+    await axios(config)
+      .then(function(response) {
+        commit("deleteArticleById", response.data);
+      })
+      .catch(function(response) {
+        commit("deleteArticleById", response);
+      });
+  },
 };
 
 const mutations = {
@@ -117,6 +132,9 @@ const mutations = {
   },
   deleteFile(state, payload) {
     state.deleteImgRes = payload;
+  },
+  deleteArticleById(state, payload){
+    state.deleteArticleRes = payload;
   }
 };
 
