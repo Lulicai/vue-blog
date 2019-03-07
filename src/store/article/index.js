@@ -1,5 +1,4 @@
 import axios from "axios";
-import { Upload } from "element-ui";
 var qs = require("qs");
 
 const state = {
@@ -7,7 +6,8 @@ const state = {
   editRes: null,
   articleListTable: null,
   createArticleRes: null,
-  uploadRes: null
+  uploadRes: null,
+  deleteImgRes: null
 };
 
 const actions = {
@@ -67,7 +67,6 @@ const actions = {
       });
   },
   async uploadfile({ commit }, payload) {
-    console.log(70, payload);
     let config = {
       method: "post",
       url: "/api/uploadImg",
@@ -82,6 +81,20 @@ const actions = {
       })
       .catch(function (response) {
         commit("uploadfile", response);
+      });
+  },
+  async deleteFile({ commit }, payload) {
+    let config = {
+      method: "post",
+      url: "/api/deleteImg",
+      data: payload
+    };
+    await axios(config)
+      .then(function(response) {
+        commit("deleteFile", response.data);
+      })
+      .catch(function (response) {
+        commit("deleteFile", response);
       });
   }
 };
@@ -101,6 +114,9 @@ const mutations = {
   },
   uploadfile(state, payload) {
     state.uploadRes = payload;
+  },
+  deleteFile(state, payload) {
+    state.deleteImgRes = payload;
   }
 };
 

@@ -30,6 +30,25 @@
       <el-form-item label="文章简介" prop="brief">
         <el-input v-model="ruleForm.brief"></el-input>
       </el-form-item>
+      <el-form-item label="文章头图">
+        <el-upload
+          class="upload-demo"
+          ref="upload"
+          :limit="1"
+          action
+          :on-preview="handlePreview"
+          :on-remove="handleRemove"
+          :file-list="fileList"
+          :auto-upload="true"
+          :http-request="uploadSectionFile"
+          accept=".jpeg, .png, .jpg"
+          :on-exceed="handleExceed"
+          list-type="picture"
+        >
+          <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
+          <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+        </el-upload>
+      </el-form-item>
       <el-form-item label="文章正文" prop="content">
         <quill-editor
           v-model="ruleForm.content"
@@ -55,6 +74,7 @@ export default {
       editorOption: {
         // some quill options
       },
+      fileList: [],
       ruleForm: {
         name: "",
         classType: "",
@@ -71,7 +91,8 @@ export default {
         ],
         brief: [
           { required: true, message: "请输入文章简介", trigger: "change" }
-        ]
+        ],
+        content: [{ required: true }]
       }
     };
   },
@@ -82,14 +103,77 @@ export default {
     ...mapState({
       resData: state => state.classify.resData,
       articleContent: state => state.article.articleContent,
-      editRes: state => state.article.editRes
+      editRes: state => state.article.editRes,
+      deleteImgRes: state => state.article.deleteImgRes,
+      uploadRes: state => state.article.uploadRes
     }),
     editor() {
       return this.$refs.myQuillEditor.quill;
     }
   },
   methods: {
-    ...mapActions(["getArticleById", "getClassList","editArticleById"]),
+    ...mapActions([
+      "getArticleById",
+      "getClassList",
+      "editArticleById",
+      "deleteFile",
+      "uploadfile",
+    ]),
+    handleRemove(file, fileList) {
+      let params = {
+        imgUrl: file.name
+      };
+      this.deleteFile(params).then(() => {
+        if (this.deleteImgRes.code == "0000") {
+          this.$message.success("文件删除成功");
+          this.fileList = [];
+        } else {
+          this.$message.error("稍后再试");
+        }
+      });
+    },
+    handlePreview(file) {
+      console.log(112, file);
+    },
+    handleExceed(files, fileList) {
+      this.$message.warning(
+        `当前限制选择 1 个文件，本次选择了 ${
+          files.length
+        } 个文件，共选择了 ${files.length + fileList.length} 个文件`
+      );
+    },
+    uploadSectionFile(param) {
+      const isJPG =
+        param.file.type === "image/jpeg" || param.file.type === "image/png";
+      const isLt2M = param.file.size / 1024 / 1024 < 2;
+      if (!isJPG) {
+        this.$message.error("上传头像图片只能是 JPG或者PNG 格式!");
+        return false;
+      }
+      if (!isLt2M) {
+        this.$message.error("上传头像图片大小不能超过 2MB!");
+        return false;
+      }
+      if (this.fileList.length <= 0) {
+        var fileObj = param.file;
+        //调用上传图片的接口
+        var form = new FormData();
+        // 文件对象
+        form.append("file", fileObj);
+        this.uploadfile(form).then(() => {
+          if (this.uploadRes.code == "0000") {
+            this.$message.success("上传图片成功");
+            let data = {
+              name: this.uploadRes.data.name,
+              url: this.uploadRes.data.imgUrl
+            };
+            this.fileList.push(data);
+          }
+        });
+      } else {
+        this.$message.warning("只能上传一个文章头图片");
+      }
+    },
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
@@ -101,7 +185,8 @@ export default {
             content: "asdasd",
             contentToMark: this.ruleForm.content,
             token: localStorage.getItem("token"),
-            id: this.$route.query.articleId
+            id: this.$route.query.articleId,
+            imgUrl: this.fileList[0].url
           };
           this.editArticleById(params).then(() => {
             if (this.editRes.code == "0000") {
@@ -110,7 +195,7 @@ export default {
                 message: "文章修改成功",
                 type: "success"
               });
-              this.$router.push('/admin/article');
+              this.$router.push("/admin/article");
             }
           });
         } else {
@@ -122,20 +207,29 @@ export default {
     resetForm(formName) {
       this.$refs[formName].resetFields();
     },
-    getArticleDetail(){
+    getArticleDetail() {
       let params = {
         id: this.$route.query.articleId
       };
-      this.getArticleById(params).then(()=>{
+      this.getArticleById(params).then(() => {
         this.ruleForm.name = this.articleContent.data.title;
         this.ruleForm.classType = this.articleContent.data.classType;
         this.ruleForm.brief = this.articleContent.data.brief;
         this.ruleForm.content = this.articleContent.data.contentToMark;
-      })
-
+        // this.fileList[0].url = this.articleContent.data.imgUrl;
+        // this.fileList[0].name = "lll";
+        if(this.articleContent.data.imgUrl){
+          let data = {
+            name:'asdad',
+            url:this.articleContent.data.imgUrl
+          }
+          this.fileList.push(data)
+          // console.log(223,this.fileList)
+        }
+      });
     },
     getAllClassType() {
-      this.getClassList()
+      this.getClassList();
     }
   },
   created() {
