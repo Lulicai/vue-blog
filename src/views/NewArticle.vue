@@ -185,7 +185,7 @@ export default {
             content: "asdasd",
             contentToMark: this.ruleForm.content,
             token: localStorage.getItem("token"),
-            imgUrl: this.fileList[0].url
+            imgUrl: this.fileList[0]? this.fileList[0].url:null
           };
           this.createNewArticle(params).then(() => {
             console.log(this.createArticleRes);

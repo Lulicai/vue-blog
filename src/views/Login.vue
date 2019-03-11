@@ -4,7 +4,7 @@
   <div class="login-panel">
     <el-form :label-position="labelPosition" :model="ruleForm2" status-icon :rules="rules2" ref="ruleForm2" label-width="70px" class="demo-ruleForm">
       <el-form-item label="手机号" prop="telphone">
-        <el-input v-model.number="ruleForm2.telphone"></el-input>
+        <el-input v-model.number="ruleForm2.telphone" maxlength="11"></el-input>
       </el-form-item>
       <el-form-item label="密码" prop="pass">
         <el-input type="password" v-model="ruleForm2.pass" autocomplete="off" maxlength="6"></el-input>

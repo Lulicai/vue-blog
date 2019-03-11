@@ -11,6 +11,7 @@
       <h1 class="title_style">{{articleContent.data.title}}</h1>
       <div class="classType_style">分类：{{articleContent.data.classType}}</div>
       <div class="brief_style">文章简介: {{articleContent.data.brief}}</div>
+      <img :src="articleContent.data.imgUrl" alt="" class="img_style">
       <div class="division_style"></div>
       <div class="ql-container">
         <div class="ql-editor" v-html="articleContent.data.contentToMark"></div>
@@ -61,5 +62,12 @@ export default {
   width: 100%;
   border-top: 1px solid #ccc;
   margin-top: 15px;
+}
+.img_style{
+  width: 30%;
+  display: block;
+  text-align: center;
+  margin-top: 20px;
+  margin: 20px auto;
 }
 </style>

@@ -8,29 +8,37 @@
         class="sitedes_style animate_style"
       >A free, fully, interesting site to record technology about Front End Engineer .</p>
       <div class="next_style animate_style" @click="nextClick">next</div>
-      <div
-        :class="[bg_2, animate_style2]"
-        id="bg2"
-      >
+      <div :class="[bg_2, animate_style2]" id="bg2">
         <ul class="nav_style">
-          <li><router-link to="/">首页</router-link></li>
-          <li><router-link to="/">文章列表</router-link></li>
-          <li><router-link to="/admin/user">个人中心</router-link></li>
+          <li>
+            <router-link to="/">首页</router-link>
+          </li>
+          <li>
+            <router-link to="/articlelist">文章列表</router-link>
+          </li>
+          <li>
+            <router-link to="/admin/user">个人中心</router-link>
+          </li>
         </ul>
         <div class="main_content">
-          <section>
-            <h1 class="article_title_style">关于vue web框架的特殊技巧</h1>
-            <p>adsadadada</p>
-            <img src="http://localhost:3000/timg.jpeg" class="img_style" alt="">
-            <div class="full_style">全文</div>
+          <section class="section_style" v-for="(item,index) in articleList" :key="index">
+            <h1 class="article_title_style">{{item.title}}</h1>
+            <div class="img_wraper">
+              <img v-if="item.imgUrl" :src="item.imgUrl" class="img_style" alt>
+              <img v-else src="../assets/pic08.jpg" class="img_style" alt>
+            </div>
+            <p class="article_brief_style">{{item.brief}}</p>
+            <div class="full_style" @click="godetail(item.id)">全文</div>
           </section>
         </div>
+        <div class="more_style"><span @click="gomore">更多...</span></div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import { mapActions, mapState } from "vuex";
 export default {
   name: "home",
   data() {
@@ -40,13 +48,17 @@ export default {
       animate_style2: "animate_style2",
       currentPosition: null,
       timer: null,
-      speed: 10
+      speed: 10,
+      articleList: []
     };
   },
-  mounted() {
-    window.addEventListener("scroll", this.paperScroll);
+  computed: {
+    ...mapState({
+      articleListTable: state => state.article.articleListTable
+    })
   },
   methods: {
+    ...mapActions(["getArticleList"]),
     nextClick() {
       this.timer = setInterval(this.runToTop, 10);
     },
@@ -60,10 +72,45 @@ export default {
         window.scrollTo(0, 400);
         clearInterval(this.timer);
       }
+    },
+    getList(page) {
+      this.pageNo = page;
+      let params = {
+        pageNo: page
+      };
+      this.getArticleList(params).then(() => {
+        if (this.articleListTable.code === "0000") {
+          let arr = this.articleList;
+          setTimeout(() => {
+            this.articleList = this.articleListTable.data.rows;
+          }, 200);
+        } else {
+          this.$message({
+            message: this.resData.message,
+            type: "warning"
+          });
+        }
+      });
+    },
+    godetail(id){
+      this.$router.push({
+        path:'articleDetailBlog',
+        query:{articleId: id}
+      })
+    },
+    gomore(){
+      this.$router.push({
+        path:'articlelist'
+      })
     }
   },
   components: {},
-  created() {}
+  created() {
+    this.getList(1);
+  },
+  beforeDestroy() {
+    window.scrollTo(0, 0);
+  }
 };
 </script>
 <style scoped>
@@ -76,7 +123,7 @@ export default {
   text-align: center;
   background-image: url("../assets/bg.jpg");
 }
-.body_bg{
+.body_bg {
   background: #1e252d;
   height: auto;
 }
@@ -135,28 +182,33 @@ export default {
   width: 15%;
   cursor: pointer;
 }
-.nav_style li:first-child a{
+.nav_style li:first-child a {
   background: #fff;
   color: #1e252d;
-  display: block
+  display: block;
 }
-.nav_style li a{
+.nav_style li a {
   text-decoration: none;
-  color: #fff
+  color: #fff;
 }
 .main_content {
   background: #fff;
   overflow: hidden;
+  padding-top: 50px;
 }
-.main_content section{
+.main_content section {
   height: auto;
 }
-.main_content .article_title_style{
-  margin: 0;
-  padding: 3rem 0;
-  font-size: 2rem;
+.main_content .article_title_style {
+  margin: 0 auto;
+  padding: 1rem 0;
+  font-size: 1.5rem;
+  width: 60%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
-.full_style{
+.full_style {
   width: 100px;
   border: 2px solid #1e252d;
   color: 1e252d;
@@ -164,6 +216,7 @@ export default {
   font-weight: 600;
   margin-bottom: 30px;
   margin-top: 20px;
+  cursor: pointer;
 }
 .animate_style {
   -webkit-animation-name: fadeInOut;
@@ -179,7 +232,7 @@ export default {
   -webkit-animation-duration: 800ms;
   -webkit-animation-direction: alternate;
 }
-.animate_style3{
+.animate_style3 {
   -webkit-animation-name: fadeInOut;
   -webkit-animation-timing-function: ease-in-out;
   -webkit-animation-iteration-count: 1;
@@ -196,11 +249,48 @@ export default {
     transform: translateY(0px);
   }
 }
-.img_style{
-  width: 60%;
+.img_style {
+  width: 50%;
 }
-.article_content_style{
+.article_content_style {
   padding: 10px;
+}
+.section_style {
+  width: 49.8%;
+  float: left;
+  border-right: 2px solid #eeeeee;
+  border-top: 2px solid #eeeeee;
+  overflow: hidden;
+}
+.article_brief_style {
+  width: 60%;
+  margin: 0 auto;
+  margin-top: 10px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  max-height: 100px;
+  line-height: 30px;
+  height: 55px;
+}
+.img_wraper{
+  height: 17rem;
+  overflow: hidden;
+}
+.more_style{
+  border: 2px solid #eee;
+  color: #1e252d;
+  background: #fff
+}
+.more_style span{
+  border: 1px solid #1e252d;
+  display: inline-block;
+  padding: 0px 50px;
+  margin: 10px 0px;
+  cursor: pointer;
+  border-radius: 10px;
 }
 </style>
 

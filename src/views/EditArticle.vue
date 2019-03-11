@@ -220,7 +220,7 @@ export default {
         // this.fileList[0].name = "lll";
         if(this.articleContent.data.imgUrl){
           let data = {
-            name:'asdad',
+            name:'',
             url:this.articleContent.data.imgUrl
           }
           this.fileList.push(data)

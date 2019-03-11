@@ -1,6 +1,7 @@
 import Vue from "vue";
 import Router from "vue-router";
 import Home from "./views/Home.vue";
+import ArticleListBlog from "./views/ArticleListBlog.vue";
 import Error from "./views/Error.vue";
 import NoRank from "./views/NoRank.vue";
 
@@ -14,6 +15,19 @@ const router = new Router({
       path: "/",
       name: "home",
       component: Home,
+      meta: ["1", "2", "3"]
+    },
+    {
+      path: "/articlelist",
+      name: "articlelist",
+      component: ArticleListBlog,
+      meta: ["1", "2", "3"]
+    },
+    {
+      path: "/articleDetailBlog",
+      name: "articleDetailBlog",
+      component: () =>
+        import(/* webpackChunkName: "about" */ "./views/articleDetailBlog.vue"),
       meta: ["1", "2", "3"]
     },
     {
