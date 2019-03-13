@@ -8,6 +8,7 @@ import "./common/css/global.css";
 import "quill/dist/quill.core.css";
 import "quill/dist/quill.snow.css";
 import "quill/dist/quill.bubble.css";
+import "element-ui/lib/theme-chalk/display.css";
 import moment from "moment";
 Vue.use(ElementUI);
 Vue.prototype.$moment = moment;

@@ -160,4 +160,18 @@ export default {
     transform: translate(0px,0px) rotate(360deg);
   }
 }
+@media screen and (max-width: 736px) {
+  .login-panel {
+    margin: 0 auto;
+    margin-top: -140px;
+    width: 15rem;
+    right: 0;
+    position: relative;
+  }
+  .login-title{
+    position: relative;
+    top: 0px;
+    right: 0px;
+  }
+}
 </style>

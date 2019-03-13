@@ -1,15 +1,31 @@
 <template>
   <div class="animate_style3 body_bg">
+    <div
+      :class="{'pop_nav':true,'hidden-md-and-up':true,'pop_nav_border':pop_nav_border,'pop_nav_border2':pop_nav_border}"
+      @click="show_sidebar"
+    >
+      <i class="el-icon-caret-left"></i>
+      <span>MENU</span>
+    </div>
     <div class="bg">
       <div class="title_style animate_style">THIS IS
         <br>LILY'S BLOG
       </div>
-      <p
-        class="sitedes_style animate_style"
-      >A free, fully, interesting site to record technology about Front End Engineer .</p>
+      <el-row justify="center">
+        <el-col
+          :xl="{span: 8, offset: 8}"
+          :lg="{span: 8, offset: 8}"
+          :md="{span: 8, offset: 8}"
+          :sm="24"
+        >
+          <p
+            class="sitedes_style animate_style"
+          >A free, fully, interesting site to record technology about Front End Engineer .</p>
+        </el-col>
+      </el-row>
       <div class="next_style animate_style" @click="nextClick">next</div>
       <div :class="[bg_2, animate_style2]" id="bg2">
-        <ul class="nav_style">
+        <ul class="nav_style hidden-sm-and-down">
           <li>
             <router-link to="/">首页</router-link>
           </li>
@@ -21,24 +37,39 @@
           </li>
         </ul>
         <div class="main_content">
-          <section class="section_style" v-for="(item,index) in articleList" :key="index">
-            <h1 class="article_title_style">{{item.title}}</h1>
-            <div class="img_wraper">
-              <img v-if="item.imgUrl" :src="item.imgUrl" class="img_style" alt>
-              <img v-else src="../assets/pic08.jpg" class="img_style" alt>
-            </div>
-            <p class="article_brief_style">{{item.brief}}</p>
-            <div class="full_style" @click="godetail(item.id)">全文</div>
-          </section>
+          <el-row>
+            <el-col
+              :xl="12"
+              :lg="12"
+              :md="12"
+              :sm="24"
+              v-for="(item,index) in articleList"
+              :key="index"
+            >
+              <section class="section_style">
+                <h1 class="article_title_style">{{item.title}}</h1>
+                <div class="img_wraper">
+                  <img v-if="item.imgUrl" :src="item.imgUrl" class="img_style" alt>
+                  <img v-else src="../assets/pic08.jpg" class="img_style" alt>
+                </div>
+                <p class="article_brief_style">{{item.brief}}</p>
+                <div class="full_style" @click="godetail(item.id)">全文</div>
+              </section>
+            </el-col>
+          </el-row>
         </div>
-        <div class="more_style"><span @click="gomore">更多...</span></div>
+        <div class="more_style">
+          <span @click="gomore">更多...</span>
+        </div>
       </div>
     </div>
+    <siderbar ref="child"></siderbar>
   </div>
 </template>
 
 <script>
 import { mapActions, mapState } from "vuex";
+import Siderbar from "../components/frontend/Siderbar.vue";
 export default {
   name: "home",
   data() {
@@ -49,9 +80,12 @@ export default {
       currentPosition: null,
       timer: null,
       speed: 10,
-      articleList: []
+      articleList: [],
+      pop_nav_border: false,
+      pop_nav_border1: false
     };
   },
+  components: { Siderbar },
   computed: {
     ...mapState({
       articleListTable: state => state.article.articleListTable
@@ -92,24 +126,42 @@ export default {
         }
       });
     },
-    godetail(id){
+    godetail(id) {
       this.$router.push({
-        path:'articleDetailBlog',
-        query:{articleId: id}
-      })
+        path: "articleDetailBlog",
+        query: { articleId: id }
+      });
     },
-    gomore(){
+    gomore() {
       this.$router.push({
-        path:'articlelist'
-      })
+        path: "articlelist"
+      });
+    },
+    show_sidebar() {
+      this.$refs.child.show_sidebar();
+    },
+    scrolling(eee) {
+      if (
+        document.documentElement.scrollTop >= 600 ||
+        document.body.scrollTop >= 600
+      ) {
+        this.pop_nav_border = true;
+        // this.pop_nav_border1 = false;
+      } else {
+        this.pop_nav_border = false;
+        this.pop_nav_border1 = true;
+      }
     }
   },
-  components: {},
   created() {
     this.getList(1);
   },
+  mounted() {
+    window.addEventListener("scroll", this.scrolling);
+  },
   beforeDestroy() {
     window.scrollTo(0, 0);
+    window.removeEventListener("scroll", this.scrolling);
   }
 };
 </script>
@@ -145,9 +197,25 @@ export default {
 .title_style {
   color: #fff;
   font-size: 5rem;
-  margin-top: 8rem;
+  margin-top: 7rem;
   margin-bottom: 2rem;
   font-weight: 900;
+}
+@media screen and (max-width: 736px) {
+  .title_style {
+    color: #fff;
+    font-size: 5rem;
+    margin-top: 0rem;
+    margin-bottom: 2rem;
+    font-weight: 900;
+  }
+  .bg_2 {
+    width: 100%;
+    margin: 0 auto;
+  }
+  .bg{
+    background-size: contain; 
+  }
 }
 .next_style {
   color: #fff;
@@ -161,9 +229,9 @@ export default {
 .sitedes_style {
   color: white;
   font-size: 1.5rem;
-  width: 40%;
-  margin: 0 auto;
+  /* width: 40%; */
   margin-bottom: 2rem;
+  padding: 0 1rem;
 }
 .next_style:hover {
   color: aqua;
@@ -250,14 +318,15 @@ export default {
   }
 }
 .img_style {
-  width: 50%;
+  width: 15rem;
+  height: 16rem;
 }
 .article_content_style {
   padding: 10px;
 }
 .section_style {
-  width: 49.8%;
-  float: left;
+  /* width: 49.8%; */
+  /* float: left; */
   border-right: 2px solid #eeeeee;
   border-top: 2px solid #eeeeee;
   overflow: hidden;
@@ -275,22 +344,46 @@ export default {
   line-height: 30px;
   height: 55px;
 }
-.img_wraper{
-  height: 17rem;
+.img_wraper {
+  /* height: 17rem; */
   overflow: hidden;
 }
-.more_style{
+.more_style {
   border: 2px solid #eee;
   color: #1e252d;
-  background: #fff
+  background: #fff;
 }
-.more_style span{
+.more_style span {
   border: 1px solid #1e252d;
   display: inline-block;
   padding: 0px 50px;
   margin: 10px 0px;
   cursor: pointer;
   border-radius: 10px;
+}
+.pop_nav {
+  position: fixed;
+  color: #fff;
+  right: 2rem;
+  top: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  padding: 2px 5px;
+  border-radius: 4px;
+  z-index: 2;
+}
+.pop_nav_border {
+  border: 1px solid #1e252d;
+  color: #1e252d;
+}
+.pop_nav_border1 {
+  border: none;
+  color: #fff;
+}
+.pop_nav i {
+  font-size: 25px;
 }
 </style>
 

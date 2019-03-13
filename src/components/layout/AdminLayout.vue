@@ -27,15 +27,25 @@
               <i class="el-icon-menu"></i>
             </div>
           </el-col>
-          <el-col :span="16">
+          <el-col
+          :xl="{span: 16, offset: 0}"
+          :lg="{span: 16, offset: 0}"
+          :md="{span: 16, offset: 0}"
+
+          >
             <div class="header-second"></div>
           </el-col>
-          <el-col :span="3">
+          <el-col
+          :xl="{span: 3, offset: 0}"
+          :lg="{span: 3, offset: 0}"
+          :md="{span: 6, offset: 0}"
+          :sm="18"
+          :xs='18'
+          >
             <div class="header-third">
               <el-badge :value="12" class="item">
                 <i class="el-icon-bell"></i>
               </el-badge>
-              <!-- <span class="quit-user" @click="quit">退出</span> -->
               <el-dropdown @command="handleCommand">
                 <span class="el-dropdown-link">
                   我的

@@ -39,7 +39,7 @@
         </template>
       </el-table-column>
     </el-table>
-    <el-dialog :title="disabled?'用户查看':'用户编辑'" :visible.sync="dialogUserTableVisible" width="40%">
+    <el-dialog :title="disabled?'用户查看':'用户编辑'" :visible.sync="dialogUserTableVisible" width="">
       <el-form :model="form" :rules="rules" ref="form">
         <el-form-item label="手机号" :label-width="formLabelWidth" prop="telephone">
           <el-input v-model="form.telephone" autocomplete="off" :disabled="disabled" maxlength="11"></el-input>

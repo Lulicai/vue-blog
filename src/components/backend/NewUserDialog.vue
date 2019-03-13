@@ -1,5 +1,5 @@
 <template>
-  <el-dialog title="创建新用户" :visible.sync="isShow" :before-close="closePop" width="40%">
+  <el-dialog title="创建新用户" :visible.sync="isShow" :before-close="closePop" width="">
     <el-form
       :model="ruleForm2"
       status-icon
@@ -125,3 +125,7 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+
+</style>

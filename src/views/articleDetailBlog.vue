@@ -1,11 +1,28 @@
 <template>
   <div class="animate_style3 body_bg">
+    <div
+      :class="{'pop_nav':true,'hidden-md-and-up':true,'pop_nav_border':pop_nav_border,'pop_nav_border2':pop_nav_border}"
+      @click="show_sidebar"
+    >
+      <i class="el-icon-caret-left"></i>
+      <span>MENU</span>
+    </div>
     <div class="bg" id="bg">
-      <p
-        class="sitedes_style animate_style"
-      >A free, fully, interesting site to record technology about Front End Engineer .</p>
+      <el-row justify="center">
+        <el-col
+          :xl="{span: 8, offset: 8}"
+          :lg="{span: 8, offset: 8}"
+          :md="{span: 8, offset: 8}"
+          :sm="24"
+          :xs='24'
+        >
+          <p
+            class="sitedes_style animate_style"
+          >A free, fully, interesting site to record technology about Front End Engineer .</p>
+        </el-col>
+      </el-row>
       <div class="bg_2 animate_style2" id="bg2">
-        <ul class="nav_style">
+        <ul class="nav_style hidden-sm-and-down">
           <li>
             <router-link to="/">首页</router-link>
           </li>
@@ -24,12 +41,21 @@
         </div>
       </div>
     </div>
+    <siderbar ref="child"></siderbar>
   </div>
 </template>
 
 <script>
 import { mapActions, mapState } from "vuex";
+import Siderbar from "../components/frontend/Siderbar.vue";
 export default {
+  components: { Siderbar },
+  data() {
+    return {
+      pop_nav_border: false,
+      pop_nav_border1: false
+    };
+  },
   created() {
     this.getArticleContent();
   },
@@ -40,6 +66,9 @@ export default {
         id: this.$route.query.articleId
       };
       this.getArticleById(params);
+    },
+    show_sidebar() {
+      this.$refs.child.show_sidebar();
     }
   },
   computed: {
@@ -71,9 +100,10 @@ export default {
 .sitedes_style {
   color: white;
   font-size: 1.5rem;
-  width: 40%;
   margin: 0 auto;
   margin-bottom: 2rem;
+  text-align: center;
+  padding: 0 1rem;
 }
 
 .nav_style {
@@ -157,5 +187,52 @@ export default {
     height: 400px;
     display: block;
     margin: 30px auto;
+}
+@media screen and (max-width: 736px) {
+  .bg_2 {
+    width: 100%;
+    margin: 0 auto;
+  }
+  .article_main {
+    margin-left: 10px;
+    /* overflow: hidden; */
+    padding-right: 10px;
+    padding-bottom: 10px;
+    width: 57%;
+  }
+  .main_content{
+    padding: 0 2rem;
+    margin-top: 2rem;
+  }
+  .art_title{
+    width: 100%;
+  }
+  .art_img_style{
+    height: auto;
+  }
+}
+.pop_nav {
+  position: fixed;
+  color: #fff;
+  right: 2rem;
+  top: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  padding: 2px 5px;
+  border-radius: 4px;
+  z-index: 2;
+}
+.pop_nav_border {
+  border: 1px solid #1e252d;
+  color: #1e252d;
+}
+.pop_nav_border1 {
+  border: none;
+  color: #fff;
+}
+.pop_nav i {
+  font-size: 25px;
 }
 </style>

@@ -1,11 +1,27 @@
 <template>
   <div class="animate_style3 body_bg">
+    <div
+      :class="{'pop_nav':true,'hidden-md-and-up':true,'pop_nav_border':pop_nav_border,'pop_nav_border2':pop_nav_border}"
+      @click="show_sidebar"
+    >
+      <i class="el-icon-caret-left"></i>
+      <span>MENU</span>
+    </div>
     <div class="bg" id="bg">
-      <p
-        class="sitedes_style animate_style"
-      >A free, fully, interesting site to record technology about Front End Engineer .</p>
+      <el-row justify="center">
+        <el-col
+          :xl="{span: 8, offset: 8}"
+          :lg="{span: 8, offset: 8}"
+          :md="{span: 8, offset: 8}"
+          :sm="24"
+        >
+          <p
+            class="sitedes_style animate_style"
+          >A free, fully, interesting site to record technology about Front End Engineer .</p>
+        </el-col>
+      </el-row>
       <div :class="[bg_2, animate_style2]" id="bg2">
-        <ul class="nav_style">
+        <ul class="nav_style hidden-sm-and-down">
           <li>
             <router-link to="/">首页</router-link>
           </li>
@@ -31,16 +47,19 @@
             </div>
           </div>
           <p class="refreshText" v-if="show" @click="loadmore">加载更多...</p>
-          <p class="nodata" v-else >对不起客官,没有更多了==3</p>
+          <p class="nodata" v-else>对不起客官,没有更多了==3</p>
         </div>
       </div>
     </div>
+    <siderbar ref="child"></siderbar>
   </div>
 </template>
 
 <script>
 import { mapActions, mapState } from "vuex";
+import Siderbar from "../components/frontend/Siderbar.vue";
 export default {
+  components: { Siderbar },
   name: "home",
   data() {
     return {
@@ -52,7 +71,9 @@ export default {
       articleList: [],
       pageNo: 1,
       count: null,
-      show:true
+      show: true,
+      pop_nav_border: false,
+      pop_nav_border1: false
     };
   },
   computed: {
@@ -80,8 +101,8 @@ export default {
             setTimeout(() => {
               this.articleList = arr.concat(this.articleListTable.data.rows);
             }, 200);
-          }else{
-              this.show = false;
+          } else {
+            this.show = false;
           }
         } else {
           this.$message({
@@ -92,18 +113,21 @@ export default {
       });
     },
     loadmore(eee) {
-        ++this.pageNo;
-        this.getList(this.pageNo);
+      ++this.pageNo;
+      this.getList(this.pageNo);
     },
-    routerToDetail(id){
-        this.$router.push({
-            path:'articleDetailBlog',
-            query: { articleId:  id}
-        })
+    routerToDetail(id) {
+      this.$router.push({
+        path: "articleDetailBlog",
+        query: { articleId: id }
+      });
+    },
+    show_sidebar() {
+      this.$refs.child.show_sidebar();
     }
   },
-   created() {
-    this.getList(this.pageNo)
+  created() {
+    this.getList(this.pageNo);
   }
 };
 </script>
@@ -128,9 +152,10 @@ export default {
 .sitedes_style {
   color: white;
   font-size: 1.5rem;
-  width: 40%;
   margin: 0 auto;
   margin-bottom: 2rem;
+  text-align: center;
+  padding: 0 1rem;
 }
 
 .nav_style {
@@ -156,6 +181,7 @@ export default {
   text-decoration: none;
   color: #fff;
 }
+
 .main_content {
   background: #fff;
   overflow: hidden;
@@ -195,7 +221,7 @@ export default {
 }
 .articlelist_style {
   width: 80%;
-  height: 150px;
+  height: 10rem;
   overflow: hidden;
   margin: 0px auto;
   margin-top: 30px;
@@ -227,22 +253,69 @@ export default {
   white-space: nowrap;
   width: 100%;
 }
+@media screen and (max-width: 736px) {
+  .bg_2 {
+    width: 100%;
+    margin: 0 auto;
+  }
+  .article_main {
+    margin-left: 10px;
+    /* overflow: hidden; */
+    padding-right: 10px;
+    padding-bottom: 10px;
+    width: 57%;
+  }
+  .articlelist_style{
+    height: 6.5rem;
+  }
+  .article_title{
+    margin: 7px;
+  }
+  .article_main p{
+    margin: 5px;
+    font-size: 0.9rem;
+  }
+}
 .refreshText {
   text-align: center;
   border: 1px solid #1e252d;
   border-radius: 5px;
-  width: 20%;
+  width: 40%;
   margin: 0 auto;
   margin-top: 20px;
-  padding: 10px 0;
+  padding: 7px 0;
   cursor: pointer;
 }
-.refreshText:hover{
-    background:#4876FF;
-    border: 1px solid #4876FF;
-    color: #fff;
+.refreshText:hover {
+  background: #4876ff;
+  border: 1px solid #4876ff;
+  color: #fff;
 }
-.nodata{
-    text-align: center;
+.nodata {
+  text-align: center;
+}
+.pop_nav {
+  position: fixed;
+  color: #fff;
+  right: 2rem;
+  top: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  padding: 2px 5px;
+  border-radius: 4px;
+  z-index: 2;
+}
+.pop_nav_border {
+  border: 1px solid #1e252d;
+  color: #1e252d;
+}
+.pop_nav_border1 {
+  border: none;
+  color: #fff;
+}
+.pop_nav i {
+  font-size: 25px;
 }
 </style>

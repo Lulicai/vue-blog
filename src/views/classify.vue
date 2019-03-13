@@ -20,7 +20,7 @@
         </template>
       </el-table-column>
     </el-table>
-    <el-dialog title="分类编辑" :visible.sync="dialogClassTableVisible" width="40%">
+    <el-dialog title="分类编辑" :visible.sync="dialogClassTableVisible" width="">
       <el-form :model="form" :rules="rules" ref="form">
         <el-form-item label="分类名称" :label-width="formLabelWidth" prop="classify">
           <el-input v-model="form.classify" autocomplete="off" maxlength="11"></el-input>

@@ -108,6 +108,7 @@ export default {
   top: 150px;
   right: 100px;
 }
+
 .login-container {
   width: 100%;
   height: 100%;
@@ -134,6 +135,23 @@ export default {
   }
   100% {
     transform: translate(0px,0px) rotate(360deg);
+  }
+}
+@media screen and (max-width: 736px) {
+  .login-panel {
+    margin: 0 auto;
+    margin-top: -89px;
+    width: 15rem;
+    right: 0;
+    position: relative;
+  }
+  .el-button{
+    padding: 12px 65px!important;
+  }
+  .login-title{
+    position: relative;
+    top: 0px;
+    right: 0px;
   }
 }
 .el-button {

@@ -7,61 +7,65 @@
         <a href="/admin/createarticle">新建文章</a>
       </el-breadcrumb-item>
     </el-breadcrumb>
-    <el-form
-      :model="ruleForm"
-      :rules="rules"
-      ref="ruleForm"
-      label-width="100px"
-      class="article-ruleForm"
-    >
-      <el-form-item label="文章名称" prop="name">
-        <el-input v-model="ruleForm.name"></el-input>
-      </el-form-item>
-      <el-form-item label="文章分类" prop="classType">
-        <el-select v-model="ruleForm.classType" placeholder="请选择文章分类">
-          <el-option
-            v-for="(ele, index) in resData.data"
-            :key="index"
-            :value="ele.classType"
-            :label="ele.classType"
-          ></el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item label="文章简介" prop="brief">
-        <el-input v-model="ruleForm.brief"></el-input>
-      </el-form-item>
-      <el-form-item label="文章头图">
-        <el-upload
-          class="upload-demo"
-          ref="upload"
-          :limit="1"
-          action
-          :on-preview="handlePreview"
-          :on-remove="handleRemove"
-          :file-list="fileList"
-          :auto-upload="true"
-          :http-request="uploadSectionFile"
-          accept=".jpeg, .png, .jpg"
-          :on-exceed="handleExceed"
-          list-type="picture"
+    <el-row>
+      <el-col>
+        <el-form
+          :model="ruleForm"
+          :rules="rules"
+          ref="ruleForm"
+          label-width="100px"
+          class="article-ruleForm"
         >
-          <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
-          <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
-        </el-upload>
-      </el-form-item>
-      <el-form-item label="文章正文" prop="content">
-        <quill-editor
-          v-model="ruleForm.content"
-          ref="myQuillEditor"
-          :options="editorOption"
-          class="edit-style"
-        ></quill-editor>
-      </el-form-item>
-      <el-form-item class="submit_style">
-        <el-button type="primary" @click="submitForm('ruleForm')">立即创建</el-button>
-        <el-button @click="resetForm('ruleForm')">重置</el-button>
-      </el-form-item>
-    </el-form>
+          <el-form-item label="文章名称" prop="name" class="el-item">
+            <el-input v-model="ruleForm.name"></el-input>
+          </el-form-item>
+          <el-form-item label="文章分类" prop="classType" class="el-item">
+            <el-select v-model="ruleForm.classType" placeholder="请选择文章分类">
+              <el-option
+                v-for="(ele, index) in resData.data"
+                :key="index"
+                :value="ele.classType"
+                :label="ele.classType"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="文章简介" prop="brief" class="el-item">
+            <el-input v-model="ruleForm.brief"></el-input>
+          </el-form-item>
+          <el-form-item label="文章头图" class="el-item">
+            <el-upload
+              class="upload-demo"
+              ref="upload"
+              :limit="1"
+              action
+              :on-preview="handlePreview"
+              :on-remove="handleRemove"
+              :file-list="fileList"
+              :auto-upload="true"
+              :http-request="uploadSectionFile"
+              accept=".jpeg, .png, .jpg"
+              :on-exceed="handleExceed"
+              list-type="picture"
+            >
+              <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
+              <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+            </el-upload>
+          </el-form-item>
+          <el-form-item label="文章正文" prop="content" class="el-item">
+            <quill-editor
+              v-model="ruleForm.content"
+              ref="myQuillEditor"
+              :options="editorOption"
+              class="edit-style"
+            ></quill-editor>
+          </el-form-item>
+          <el-form-item class="submit_style el-item">
+            <el-button type="primary" @click="submitForm('ruleForm')">立即创建</el-button>
+            <el-button @click="resetForm('ruleForm')">重置</el-button>
+          </el-form-item>
+        </el-form>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
@@ -92,9 +96,7 @@ export default {
         brief: [
           { required: true, message: "请输入文章简介", trigger: "change" }
         ],
-        content:[
-          {required:true}
-        ]
+        content: [{ required: true }]
       }
     };
   },
@@ -170,8 +172,8 @@ export default {
             this.fileList.push(data);
           }
         });
-      }else{
-        this.$message.warning('只能上传一个文章头图片');
+      } else {
+        this.$message.warning("只能上传一个文章头图片");
       }
     },
     submitForm(formName) {
@@ -185,7 +187,7 @@ export default {
             content: "asdasd",
             contentToMark: this.ruleForm.content,
             token: localStorage.getItem("token"),
-            imgUrl: this.fileList[0]? this.fileList[0].url:null
+            imgUrl: this.fileList[0] ? this.fileList[0].url : null
           };
           this.createNewArticle(params).then(() => {
             console.log(this.createArticleRes);
@@ -225,6 +227,10 @@ export default {
   background: white;
   padding: 20px 20px;
   margin: 10px;
+  overflow-x: scroll;
+}
+.el-item{
+  min-width: 400px;
 }
 .edit-style {
   height: 600px;

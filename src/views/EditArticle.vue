@@ -14,10 +14,10 @@
       label-width="100px"
       class="article-ruleForm"
     >
-      <el-form-item label="文章名称" prop="name">
+      <el-form-item label="文章名称" prop="name" class="el-item">
         <el-input v-model="ruleForm.name"></el-input>
       </el-form-item>
-      <el-form-item label="文章分类" prop="classType">
+      <el-form-item label="文章分类" prop="classType" class="el-item">
         <el-select v-model="ruleForm.classType" placeholder="请选择文章分类">
           <el-option
             v-for="(ele, index) in resData.data"
@@ -27,10 +27,10 @@
           ></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="文章简介" prop="brief">
+      <el-form-item label="文章简介" prop="brief" class="el-item">
         <el-input v-model="ruleForm.brief"></el-input>
       </el-form-item>
-      <el-form-item label="文章头图">
+      <el-form-item label="文章头图" class="el-item">
         <el-upload
           class="upload-demo"
           ref="upload"
@@ -49,7 +49,7 @@
           <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
         </el-upload>
       </el-form-item>
-      <el-form-item label="文章正文" prop="content">
+      <el-form-item label="文章正文" prop="content" class="el-item">
         <quill-editor
           v-model="ruleForm.content"
           ref="myQuillEditor"
@@ -57,7 +57,7 @@
           class="edit-style"
         ></quill-editor>
       </el-form-item>
-      <el-form-item class="submit_style">
+      <el-form-item class="submit_style el-item">
         <el-button type="primary" @click="submitForm('ruleForm')">立即创建</el-button>
         <el-button @click="resetForm('ruleForm')">重置</el-button>
       </el-form-item>
@@ -245,6 +245,10 @@ export default {
   background: white;
   padding: 20px 20px;
   margin: 10px;
+  overflow-x: scroll;
+}
+.el-item{
+  width: 400px;
 }
 .edit-style {
   height: 600px;
