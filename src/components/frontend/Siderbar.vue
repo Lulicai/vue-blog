@@ -1,7 +1,17 @@
 <template>
-  <div :class="[oblectClass]">
-    <div class="sidebar_nav_wraper">
-      <div class="shutdown" @click="shutdown"><i class="el-icon-close"></i></div>
+<div>
+<div
+    :class="[oblectClass]"
+    @touchstart="touchStart"
+    @touchmove="touchMove"
+    @touchend="touchEnd"
+    ref="siderbar"
+  >
+  </div>
+  <div :class="[oblectClass,'sidebar_nav_wraper']">
+      <div id="shutdown" class="shutdown" @touchstart.capture="shutdown">
+        <i class="el-icon-close"></i>
+      </div>
       <ul class="sidebar_nav">
         <li>
           <router-link to="/">首页</router-link>
@@ -14,7 +24,8 @@
         </li>
       </ul>
     </div>
-  </div>
+</div>
+  
 </template>
 <script>
 export default {
@@ -27,7 +38,11 @@ export default {
         hidden2: false,
         animation_style: false,
         "hidden-md-and-up": true
-      }
+      },
+      startX: 0,
+      moveX: 0,
+      endX: 0,
+      disX: 0 //移动距离
     };
   },
   methods: {
@@ -39,6 +54,35 @@ export default {
     shutdown() {
       this.oblectClass.animation_style = false;
       this.oblectClass.hidden2 = true;
+    },
+    touchStart(e) {
+      if (e.touches.length == 1) {
+        //tounches类数组，等于1时表示此时有只有一只手指在触摸屏幕
+        this.startX = e.touches[0].clientX; // 记录开始位置
+      }
+    },
+    touchMove(e) {
+      // console.log(e);
+      if (e.touches.length == 1) {
+        this.moveX = e.touches[0].clientX;
+        this.disX = this.moveX - this.startX;
+        if (this.disX > 20) {
+          // this.slideEffect = "transform:translateX(" + this.disX + "px)";
+          // this.oblectClass.animation_style = false;
+          // this.oblectClass.hidden2 = true;
+        }
+      }
+    },
+    touchEnd(e) {
+      e.preventDefault();
+      if (e.changedTouches.length == 1) {
+        let endX = e.changedTouches[0].clientX;
+        this.disX = endX - this.startX;
+        if (this.disX > 20){
+          this.oblectClass.animation_style = false;
+          this.oblectClass.hidden2 = true;
+        }
+      }
     }
   }
 };
